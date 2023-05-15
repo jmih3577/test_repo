@@ -1,0 +1,581 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "pep-client",
+        "version": "0.1"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080",
+            "description": "dev"
+        }
+    ],
+    "paths": {
+        "/pepData/sanctionList": {
+            "post": {
+                "tags": [
+                    "Notification chat"
+                ],
+                "summary": "Create Client",
+                "operationId": "createClients",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "sanctionList"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "sanctionList": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pepData": {
+            "get": {
+                "tags": [
+                    "Notification chat"
+                ],
+                "summary": "Invoke Client",
+                "operationId": "deleteClient",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Notification chat"
+                ],
+                "summary": "Create Client",
+                "operationId": "createClient",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ClientDto"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClientDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pepData/request": {
+            "get": {
+                "tags": [
+                    "Notification chat"
+                ],
+                "summary": "Validate client",
+                "operationId": "validateClient",
+                "parameters": [
+                    {
+                        "name": "clientId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "srId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "fullName",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "transliteName",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "birthDate",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClientDtoResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pepData/e": {
+            "get": {
+                "tags": [
+                    "Notification chat"
+                ],
+                "summary": "Invoke Clients",
+                "operationId": "parseClient",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/pepData/{clientId}": {
+            "delete": {
+                "tags": [
+                    "Notification chat"
+                ],
+                "summary": "Create Client",
+                "operationId": "deleteClient_1",
+                "parameters": [
+                    {
+                        "name": "clientId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AddDobDto": {
+                "type": "object",
+                "properties": {
+                    "bdYy": {
+                        "type": "string"
+                    },
+                    "bdMm": {
+                        "type": "string"
+                    },
+                    "bdDd": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AddDodDto": {
+                "type": "object",
+                "properties": {
+                    "dd": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AddNameDto": {
+                "type": "object",
+                "properties": {
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "middleName": {
+                        "type": "string"
+                    },
+                    "fullName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AddPobDto": {
+                "type": "object",
+                "properties": {
+                    "pb": {
+                        "type": "string"
+                    }
+                }
+            },
+            "Category407Dto": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string"
+                    }
+                }
+            },
+            "CategoryDto": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string"
+                    }
+                }
+            },
+            "ClientDto": {
+                "type": "object",
+                "properties": {
+                    "sparkGuid": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "fullName": {
+                        "type": "string"
+                    },
+                    "bdYy": {
+                        "type": "string"
+                    },
+                    "bdMm": {
+                        "type": "string"
+                    },
+                    "bdDd": {
+                        "type": "string"
+                    },
+                    "dd": {
+                        "type": "string"
+                    },
+                    "pb": {
+                        "type": "string"
+                    },
+                    "dead": {
+                        "type": "boolean"
+                    },
+                    "gender": {
+                        "type": "string"
+                    },
+                    "addDobDtos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AddDobDto"
+                        }
+                    },
+                    "addDodDtos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AddDodDto"
+                        }
+                    },
+                    "addPobDtos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AddPobDto"
+                        }
+                    },
+                    "translitNameDtos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TranslitNameDto"
+                        }
+                    },
+                    "addNameDtos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AddNameDto"
+                        }
+                    },
+                    "category407Dtos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Category407Dto"
+                        }
+                    },
+                    "categoryDtos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CategoryDto"
+                        }
+                    },
+                    "relativeDtos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/RelativeDto"
+                        }
+                    },
+                    "sanlistDtos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/SanlistDto"
+                        }
+                    },
+                    "jobDtos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/JobDto"
+                        }
+                    },
+                    "documentDtos": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/DocumentDto"
+                        }
+                    }
+                }
+            },
+            "DocumentDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "mserial": {
+                        "type": "string"
+                    },
+                    "number": {
+                        "type": "string"
+                    },
+                    "issuingCountry": {
+                        "type": "string"
+                    },
+                    "issue": {
+                        "type": "string"
+                    },
+                    "tag": {
+                        "type": "string"
+                    }
+                }
+            },
+            "JobDto": {
+                "type": "object",
+                "properties": {
+                    "sparkGuidId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "ds": {
+                        "type": "string"
+                    },
+                    "de": {
+                        "type": "string"
+                    },
+                    "main": {
+                        "type": "boolean"
+                    },
+                    "unactive": {
+                        "type": "boolean"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "authority": {
+                        "type": "string"
+                    }
+                }
+            },
+            "RelativeDto": {
+                "type": "object",
+                "properties": {
+                    "relGuidId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "relTypeId": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "relType": {
+                        "type": "string"
+                    }
+                }
+            },
+            "SanlistDto": {
+                "type": "object",
+                "properties": {
+                    "description": {
+                        "type": "string"
+                    },
+                    "sanlistId": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "TranslitNameDto": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "BodyClientResponse": {
+                "type": "object",
+                "properties": {
+                    "clientId": {
+                        "type": "string"
+                    },
+                    "srId": {
+                        "type": "string"
+                    },
+                    "fullName": {
+                        "type": "string"
+                    },
+                    "DOB": {
+                        "type": "string"
+                    },
+                    "flgPEP": {
+                        "type": "boolean"
+                    },
+                    "PEPList": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PEPResponse"
+                        }
+                    }
+                }
+            },
+            "ClientDtoResponse": {
+                "type": "object",
+                "properties": {
+                    "body": {
+                        "$ref": "#/components/schemas/BodyClientResponse"
+                    }
+                }
+            },
+            "JobResponse": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "startDT": {
+                        "type": "string"
+                    },
+                    "endDT": {
+                        "type": "string"
+                    },
+                    "place": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PEPResponse": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "POB": {
+                        "type": "string"
+                    },
+                    "job": {
+                        "$ref": "#/components/schemas/JobResponse"
+                    },
+                    "persdoc": {
+                        "$ref": "#/components/schemas/PersdocResponse"
+                    },
+                    "relative": {
+                        "$ref": "#/components/schemas/RelativeResponse"
+                    }
+                }
+            },
+            "PersdocResponse": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "mserial": {
+                        "type": "string"
+                    },
+                    "number": {
+                        "type": "string"
+                    },
+                    "issuing_country": {
+                        "type": "string"
+                    },
+                    "issue": {
+                        "type": "string"
+                    },
+                    "tag": {
+                        "type": "string"
+                    }
+                }
+            },
+            "RelativeResponse": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
