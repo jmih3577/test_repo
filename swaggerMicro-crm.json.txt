@@ -1,0 +1,226 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "pep-client",
+        "version": "0.1"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080",
+            "description": "dev"
+        }
+    ],
+    "paths": {
+        "/micro-pep-client/pep-data": {
+            "post": {
+                "tags": [
+                    "Notification chat"
+                ],
+                "summary": "Create Client",
+                "operationId": "createClients",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "sanctionList"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                    "sanctionList": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/micro-pep-client/pep-list": {
+            "get": {
+                "tags": [
+                    "Notification chat"
+                ],
+                "summary": "Validate client",
+                "operationId": "getValidatedClients",
+                "parameters": [
+                    {
+                        "name": "clientId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "srId",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "fullName",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "transliteName",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "birthDate",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ClientDtoResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "BodyClientResponse": {
+                "type": "object",
+                "properties": {
+                    "clientId": {
+                        "type": "string"
+                    },
+                    "srId": {
+                        "type": "string"
+                    },
+                    "fullName": {
+                        "type": "string"
+                    },
+                    "flgPEP": {
+                        "type": "boolean"
+                    },
+                    "PEPList": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PEPResponse"
+                        }
+                    }
+                }
+            },
+            "ClientDtoResponse": {
+                "type": "object",
+                "properties": {
+                    "body": {
+                        "$ref": "#/components/schemas/BodyClientResponse"
+                    }
+                }
+            },
+            "JobResponse": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "startDT": {
+                        "type": "string"
+                    },
+                    "endDT": {
+                        "type": "string"
+                    },
+                    "place": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PEPResponse": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "POB": {
+                        "type": "string"
+                    },
+                    "DOB": {
+                        "type": "string"
+                    },
+                    "job": {
+                        "$ref": "#/components/schemas/JobResponse"
+                    },
+                    "persdoc": {
+                        "$ref": "#/components/schemas/PersdocResponse"
+                    },
+                    "relative": {
+                        "$ref": "#/components/schemas/RelativeResponse"
+                    }
+                }
+            },
+            "PersdocResponse": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "mserial": {
+                        "type": "string"
+                    },
+                    "number": {
+                        "type": "string"
+                    },
+                    "issuing_country": {
+                        "type": "string"
+                    },
+                    "issue": {
+                        "type": "string"
+                    },
+                    "tag": {
+                        "type": "string"
+                    }
+                }
+            },
+            "RelativeResponse": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
