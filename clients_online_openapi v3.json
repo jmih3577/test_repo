@@ -1,0 +1,923 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Модуль проверки клиентов/субъектов/связанных лиц в режиме Online",
+    "description": "Модуль проверки клиентов/субъектов/связанных лиц в режиме Online",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:8080/api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "client",
+      "description": "Проверка клиентов"
+    }
+  ],
+  "paths": {
+    "/clients/online": {
+      "post": {
+        "tags": [
+          "client"
+        ],
+        "summary": "Проверить клиента online",
+        "description": "Проверить клиента online",
+        "operationId": "checkClient",
+        "requestBody": {
+          "description": "Структура по клиенту",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/clientRequestOnline"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/clientResponseOnline"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid data provided"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "clientRequestOnline": {
+        "type": "object",
+        "required": [
+          "requestId",
+          "timeStamp",
+          "items",
+          "exId"
+        ],
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "description": "Уникальный идентификатор запроса",
+            "example": "4a1820f5-a8cd-4eb9-b5e2-c98df6bc414e"
+          },
+          "exId": {
+            "type": "string",
+            "description": "Номер запроса",
+            "example": "externalId"
+          },
+          "timeStamp": {
+            "type": "string",
+            "description": "Дата и время отправки запроса из системы отправителя запроса в систему Multiverse",
+            "example": "2023-07-26T15:03:34.067",
+            "pattern": "YYYY-mm-ddTHH:MM:SS.SSS"
+          },
+          "items": {
+            "type": "array",
+            "description": "Массив данных по клиенту",
+            "items": {
+              "$ref": "#/components/schemas/requestItems"
+            }
+          }
+        }
+      },
+      "clientResponseOnline": {
+        "type": "object",
+        "required": [
+          "requestId",
+          "responseId",
+          "exId",
+          "timeStamp",
+          "dataFlag",
+          "clientId"
+        ],
+        "properties": {
+          "requestId": {
+            "type": "string",
+            "description": "Уникальный идентификатор запроса",
+            "example": "4a1820f5-a8cd-4eb9-b5e2-c98df6bc414e"
+          },
+          "responseId": {
+            "type": "string",
+            "description": "Уникальный идентификатор ответа",
+            "example": "4a1820f5-a8cd-4eb9-b5e2-c98df6bc414e"
+          },
+          "exId": {
+            "type": "string",
+            "description": "Номер запроса"
+          },
+          "timeStamp": {
+            "type": "string",
+            "description": "Дата и время отправки ответа из системы Multiverse",
+            "example": "2023-07-26T15:03:34.067",
+            "pattern": "YYYY-mm-ddTHH:MM:SS.SSS"
+          },
+          "dataFlag": {
+            "$ref": "#/components/schemas/dataFlag"
+          },
+          "dataLists": {
+            "type": "array",
+            "description": "Массив данных по совпадениям",
+            "items": {
+              "$ref": "#/components/schemas/dataLists"
+            }
+          },
+          "clientId": {
+            "type": "string",
+            "description": "Уникальный идентификатор клиента"
+          }
+        }
+      },
+      "requestItems": {
+        "type": "object",
+        "required": [
+          "names",
+          "clientType"
+        ],
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Уникальный идентификатор клиента",
+            "example": "BU01"
+          },
+          "clientType": {
+            "type": "string",
+            "description": "Тип клиента, значение из справочника",
+            "example": "0"
+          },
+          "birthdate": {
+            "type": "string",
+            "description": "Дата рождения",
+            "pattern": "YYYY-MM-DD",
+            "example": "1999-10-21"
+          },
+          "names": {
+            "type": "array",
+            "description": "Наименования/ФИО клиента",
+            "items": {
+              "type": "string"
+            }
+          },
+          "text": {
+            "type": "array",
+            "description": "Иная неструктурированная информация по клиенту",
+            "items": {
+              "type": "string"
+            }
+          },
+          "addresses": {
+            "type": "array",
+            "description": "Адреса клиента",
+            "items": {
+              "type": "string"
+            }
+          },
+          "countryIso2": {
+            "type": "array",
+            "description": "Страны клиента в формате ISO 3166-2",
+            "items": {
+              "type": "string"
+            }
+          },
+          "account": {
+            "type": "array",
+            "description": "Номера счетов клиента",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ids": {
+            "$ref": "#/components/schemas/requestIds"
+          },
+          "docs": {
+            "$ref": "#/components/schemas/requestDocs"
+          }
+        }
+      },
+      "requestIds": {
+        "type": "object",
+        "description": "Массив клиентских идентификаторов",
+        "properties": {
+          "inn": {
+            "type": "array",
+            "description": "ИНН клиента",
+            "items": {
+              "type": "string"
+            }
+          },
+          "swift": {
+            "type": "array",
+            "description": "SWIFT клиента",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bic": {
+            "type": "array",
+            "description": "BIC клиента",
+            "items": {
+              "type": "string"
+            }
+          },
+          "isin": {
+            "type": "array",
+            "description": "ISIN клиента",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ogrn": {
+            "type": "array",
+            "description": "ОГРН клиента",
+            "items": {
+              "type": "string"
+            }
+          },
+          "tin": {
+            "type": "array",
+            "description": "TIN клиента",
+            "items": {
+              "type": "string"
+            }
+          },
+          "lei": {
+            "type": "array",
+            "description": "LEI клиента",
+            "items": {
+              "type": "string"
+            }
+          },
+          "kpp": {
+            "type": "array",
+            "description": "КПП клиента",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ncc": {
+            "type": "array",
+            "description": "NCC клиента",
+            "items": {
+              "type": "string"
+            }
+          },
+          "other": {
+            "type": "array",
+            "description": "Иные идентификаторы объекта",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "requestDocs": {
+        "type": "object",
+        "description": "ДУЛ клиента",
+        "required": [
+          "number"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "description": "Тип ДУЛ"
+          },
+          "name": {
+            "type": "string",
+            "description": "Наименование ДУЛ"
+          },
+          "series": {
+            "type": "string",
+            "description": "Серия ДУЛ"
+          },
+          "number": {
+            "type": "string",
+            "description": "Номер ДУЛ"
+          }
+        }
+      },
+      "dataLists": {
+        "type": "object",
+        "description": "Массив данных по совпадениям",
+        "properties": {
+          "sanctionList": {
+            "type": "array",
+            "description": "Массив данных по санкционным участникам",
+            "items": {
+              "$ref": "#/components/schemas/sanctionList"
+            }
+          },
+          "pepList": {
+            "type": "array",
+            "description": "Массив данных по ПДЛ",
+            "items": {
+              "$ref": "#/components/schemas/pepList"
+            }
+          }
+        }
+      },
+      "dataFlag": {
+        "type": "object",
+        "description": "Массив флагов проверки",
+        "required": [
+          "pep",
+          "sanction"
+        ],
+        "properties": {
+          "pep": {
+            "type": "string",
+            "enum": [
+              true,
+              false
+            ],
+            "description": "Общая отметка выявлено/не выявлено совпадение по ПДЛ"
+          },
+          "sanction": {
+            "type": "string",
+            "enum": [
+              true,
+              false
+            ],
+            "description": "Общая отметка выявлено/не выявлено совпадение по санкционным участникам"
+          }
+        }
+      },
+      "sanctionList": {
+        "type": "object",
+        "description": "Массив данных по санкционным участникам",
+        "required": [
+          "recordId",
+          "names",
+          "dataMatch"
+        ],
+        "properties": {
+          "recordId": {
+            "type": "string",
+            "description": "Уникальный идентификатор записи списка"
+          },
+          "exRecordId": {
+            "type": "string",
+            "description": "Уникальный идентификатор записи списка внешний"
+          },
+          "ids": {
+            "type": "array",
+            "description": "Массив идентификаторов записи списка",
+            "items": {
+              "$ref": "#/components/schemas/responseIds"
+            }
+          },
+          "names": {
+            "type": "array",
+            "description": "Наименования/ФИО записи списка",
+            "items": {
+              "$ref": "#/components/schemas/responseNames"
+            }
+          },
+          "text": {
+            "type": "array",
+            "description": "Иная информация записи списка",
+            "items": {
+              "type": "string"
+            }
+          },
+          "addresses": {
+            "type": "array",
+            "description": "Адреса записи списка",
+            "items": {
+              "$ref": "#/components/schemas/responseAddresses"
+            }
+          },
+          "country": {
+            "type": "array",
+            "description": "Страны записи списка",
+            "items": {
+              "$ref": "#/components/schemas/responseCountry"
+            }
+          },
+          "docs": {
+            "type": "array",
+            "description": "Документы записи",
+            "items": {
+              "$ref": "#/components/schemas/responseDocs"
+            }
+          },
+          "jobs": {
+            "type": "array",
+            "description": "Данные о месте работы",
+            "items": {
+              "$ref": "#/components/schemas/responseJobs"
+            }
+          },
+          "relatives": {
+            "type": "array",
+            "description": "Данные по связанным лицам",
+            "items": {
+              "$ref": "#/components/schemas/responseRelatives"
+            }
+          },
+          "sanction": {
+            "type": "array",
+            "description": "Данные по санкционным спискам",
+            "items": {
+              "$ref": "#/components/schemas/responseSanction"
+            }
+          },
+          "dates": {
+            "type": "array",
+            "description": "Данные по датам",
+            "items": {
+              "$ref": "#/components/schemas/responseDates"
+            }
+          },
+          "matchMarkers": {
+            "type": "array",
+            "description": "Маркеры совпадения",
+            "items": {
+              "type": "string",
+              "examples": [
+                "M1",
+                "M2",
+                "M3"
+              ]
+            }
+          },
+          "dataMatch": {
+            "$ref": "#/components/schemas/responseDataMatch"
+          }
+        }
+      },
+      "pepList": {
+        "type": "object",
+        "required": [
+          "recordId",
+          "names",
+          "dataMatch"
+        ],
+        "properties": {
+          "recordId": {
+            "type": "string",
+            "description": "Уникальный идентификатор записи списка"
+          },
+          "exRecordId": {
+            "type": "string",
+            "description": "Уникальный идентификатор записи списка внешний"
+          },
+          "ids": {
+            "type": "array",
+            "description": "Массив идентификаторов записи списка",
+            "items": {
+              "$ref": "#/components/schemas/responseIds"
+            }
+          },
+          "names": {
+            "type": "array",
+            "description": "Наименования/ФИО записи списка",
+            "items": {
+              "$ref": "#/components/schemas/responseNames"
+            }
+          },
+          "text": {
+            "type": "array",
+            "description": "Иная информация записи списка",
+            "items": {
+              "type": "string"
+            }
+          },
+          "addresses": {
+            "type": "array",
+            "description": "Адреса записи списка",
+            "items": {
+              "$ref": "#/components/schemas/responseAddresses"
+            }
+          },
+          "country": {
+            "type": "array",
+            "description": "Страны записи списка",
+            "items": {
+              "$ref": "#/components/schemas/responseCountry"
+            }
+          },
+          "docs": {
+            "type": "array",
+            "description": "Документы записи",
+            "items": {
+              "$ref": "#/components/schemas/responseDocs"
+            }
+          },
+          "jobs": {
+            "type": "array",
+            "description": "Данные о месте работы",
+            "items": {
+              "$ref": "#/components/schemas/responseJobs"
+            }
+          },
+          "relatives": {
+            "type": "array",
+            "description": "Данные по связанным лицам",
+            "items": {
+              "$ref": "#/components/schemas/responseRelatives"
+            }
+          },
+          "dates": {
+            "type": "array",
+            "description": "Данные по датам",
+            "items": {
+              "$ref": "#/components/schemas/responseDates"
+            }
+          },
+          "matchMarkers": {
+            "type": "array",
+            "description": "Маркеры совпадения",
+            "items": {
+              "type": "string",
+              "examples": [
+                "M1",
+                "M2",
+                "M3"
+              ]
+            }
+          },
+          "dataMatch": {
+            "$ref": "#/components/schemas/responseDataMatch"
+          }
+        }
+      },
+      "responseIds": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "nameValue": {
+            "type": "string",
+            "description": "Тип идентификатора, например: INN, OGRN, KIO и др"
+          },
+          "value": {
+            "type": "array",
+            "description": "Значение идентификатора",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "responseNames": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "nameValue": {
+            "type": "string",
+            "description": "Тип написания ФИО/Наименований",
+            "examples": [
+              "PrimaryName",
+              "AlternativeName",
+              "SpellingVariation"
+            ]
+          },
+          "value": {
+            "type": "array",
+            "description": "Значение ФИО/Наименований",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "responseAddresses": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "nameValue": {
+            "type": "string",
+            "description": "Тип адреса",
+            "examples": [
+              "PlaceBirth",
+              "Address"
+            ]
+          },
+          "value": {
+            "type": "array",
+            "description": "Значение адреса",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "responseCountry": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "nameValue": {
+            "type": "string",
+            "description": "Тип страны",
+            "examples": [
+              "Citizenship",
+              "CountryRegistration"
+            ]
+          },
+          "value": {
+            "type": "array",
+            "description": "Значение страны",
+            "items": {
+              "type": "string"
+            }
+          },
+          "countryCode": {
+            "type": "array",
+            "description": "Двузначный ISO-код страны",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "responseDocs": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "nameValue": {
+            "type": "string",
+            "description": "Тип документа ФЛ",
+            "examples": [
+              "birth_certificate",
+              "drivers_license",
+              "passport",
+              "identification_number",
+              "military_document",
+              "tax_number"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "description": "Значение документа строкой"
+          },
+          "serial": {
+            "type": "string",
+            "description": "Серия документа"
+          },
+          "number": {
+            "type": "string",
+            "description": "Номер документа"
+          }
+        }
+      },
+      "responseJobs": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string",
+            "description": "Наименование должности физического лица"
+          },
+          "authority": {
+            "type": "string",
+            "description": "Наименование ведомства"
+          },
+          "startDate": {
+            "type": "string",
+            "description": "Дата начала работы",
+            "pattern": "YYYY-MM-DD"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "Дата окончания работы",
+            "pattern": "YYYY-MM-DD"
+          },
+          "main": {
+            "type": "string",
+            "description": "Признак работы (основной, др)",
+            "enum": [
+              true,
+              false,
+              null
+            ]
+          },
+          "active": {
+            "type": "string",
+            "description": "Признак должности - активная, неактивная. Используется только в случае, когда дата завершения полномочий в должности неизвестна, но известно, что физическое лицо больше не занимает указанную должность",
+            "enum": [
+              true,
+              false,
+              null
+            ]
+          },
+          "exId": {
+            "type": "string",
+            "description": "Информация о должности физического лица, «служебный» идентификатор записи в X-Compliance"
+          }
+        }
+      },
+      "responseRelatives": {
+        "type": "object",
+        "properties": {
+          "nameValue": {
+            "type": "string",
+            "description": "Тип связи, например",
+            "enum": [
+              "person",
+              "company",
+              "undefined",
+              "wife",
+              "son"
+            ]
+          },
+          "value": {
+            "type": "array",
+            "description": "Наименование субъекта связи",
+            "items": {
+              "type": "string"
+            }
+          },
+          "exId": {
+            "type": "string",
+            "description": "Внутренний идентификатор типа связи в X-Compliance"
+          }
+        }
+      },
+      "responseSanction": {
+        "type": "object",
+        "properties": {
+          "codeValue": {
+            "type": "string",
+            "description": "Код санкции"
+          },
+          "value": {
+            "type": "array",
+            "description": "Наименование санкции",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "responseDates": {
+        "type": "object",
+        "required": [
+          "value"
+        ],
+        "properties": {
+          "nameValue": {
+            "type": "string",
+            "description": "Тип даты",
+            "examples": [
+              "DateBirth",
+              "DeceaseDate",
+              "DateRegistration",
+              "AlternativeDateBirth"
+            ]
+          },
+          "value": {
+            "type": "array",
+            "description": "Дата",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "responseDataMatch": {
+        "type": "object",
+        "description": "Наименование значений, с которыми произошло совпадение",
+        "properties": {
+          "name": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "country": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "inn": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "ogrn": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "swift": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "other": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "kio": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "bik": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "imo": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "mmsi": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "callSign": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "regn": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "isin": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "doc": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "apiError": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "pattern": "YYYY-mm-ddTHH:MM:SS.SSS"
+          },
+          "status": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "error": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "Request": {
+        "description": "Запрос проверки",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/clientRequestOnline"
+            }
+          }
+        }
+      }
+    }
+  }
+}
